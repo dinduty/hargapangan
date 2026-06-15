@@ -55,7 +55,7 @@ else:
     st.sidebar.info("ℹ️ Gunakan data demo atau upload file CSV/Excel SISP Anda")
 
 # ==================== HEADER ====================
-st.title("📊 SISP Analytics Dashboard")
+st.title("📊 Harga Pangan Analytics Dashboard")
 st.caption(f"Dashboard Analisis Data Pasar - {province} | Komoditas: {commodity}")
 
 # ==================== FUNGSI GENERATE DATA DUMMY ====================
