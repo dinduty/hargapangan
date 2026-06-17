@@ -1045,13 +1045,18 @@ else:
     Silakan upload file CSV/Excel melalui sidebar atau pastikan file `harga_pangan_satudata.csv` ada di folder yang sama.
     """)
 
+from datetime import datetime, timedelta
+
 # ==================== FOOTER ====================
 st.markdown("---")
 if df is not None:
+    # Tambahkan 7 jam (karena UTC+7 = WIB)
+    waktu_sekarang = datetime.now() + timedelta(hours=7)
+    
     st.caption(
         f"© 2025 Harga Pangan Analytics Dashboard | Data: {len(df):,} baris | "
         f"Periode: {df['tanggal'].min().strftime('%d %b %Y')} - {df['tanggal'].max().strftime('%d %b %Y')} | "
-        f"{datetime.now().strftime('%d %B %Y %H:%M')}"
+        f"Terakhir diperbarui: {waktu_sekarang.strftime('%d %B %Y %H:%M')} WIB"
     )
 else:
     st.caption("© 2025 Harga Pangan Analytics Dashboard")
