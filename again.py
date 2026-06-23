@@ -16,7 +16,7 @@ from sklearn.model_selection import cross_val_score
 from scipy import stats
 from pathlib import Path
 
-# ==================== KONFIGURASI HALAMAN ====================
+# KONFIGURASI HALAMAN 
 st.set_page_config(
     page_title="Harga Bahan Pangan Analytics Dashboard",
     page_icon="📊",
@@ -24,7 +24,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# ==================== LOAD DATA ====================
+# LOAD DATA
 @st.cache_data
 def load_real_data():
     """Load data from CSV file"""
@@ -47,7 +47,7 @@ def load_real_data():
     
     return None
 
-# ==================== SIDEBAR ====================
+# SIDEBAR
 st.sidebar.title("⚙️ Panel Kontrol")
 st.sidebar.markdown("---")
 
@@ -72,7 +72,7 @@ date_range = st.sidebar.date_input(
     key="date_range"
 )
 
-# ==================== UPLOAD DATA + TEMPLATE ====================
+# UPLOAD DATA + TEMPLATE
 st.sidebar.markdown("---")
 st.sidebar.subheader("📂 Upload Data")
 
@@ -140,7 +140,7 @@ st.title("📊 Harga Pangan Analytics Dashboard")
 if df is not None:
     st.caption(f"Dashboard Analisis Data - {province} | Komoditas: {commodity}")
 
-# ==================== FUNGSI PREPARE DATA UNTUK PERBANDINGAN ====================
+# FUNGSI PREPARE DATA PERBANDINGAN
 def prepare_comparison_data(df, province, date_range):
     """Siapkan data untuk perbandingan RF vs K-Means"""
     
@@ -196,7 +196,7 @@ def prepare_comparison_data(df, province, date_range):
     df_features = pd.DataFrame(feature_data)
     return df_features, df_data
 
-# ==================== 1. SARIMA ====================
+# SARIMA
 def sarima_section(df, province, commodity, date_range):
     st.header("📈 SARIMA: Prediksi Harga Komoditas")
     
@@ -308,7 +308,7 @@ def sarima_section(df, province, commodity, date_range):
             hide_index=True
         )
 
-# ==================== 2. RANDOM FOREST ====================
+# RANDOM FOREST
 def random_forest_section(df, province, date_range):
     st.header("🌲 Random Forest Classifier: Analisis Risiko Komoditas")
     
@@ -583,7 +583,7 @@ def random_forest_section(df, province, date_range):
         | Range | Rp {median_range:,.0f} | {', '.join(df_features[df_features['range_harga'] > median_range]['komoditas'].tolist())} |
         """)
 
-# ==================== 3. K-MEANS ====================
+# K-MEANS
 def kmeans_section(df, province, date_range):
     st.header("🎯 K-Means Clustering: Segmentasi Komoditas")
     
@@ -753,7 +753,7 @@ def kmeans_section(df, province, date_range):
             )
             st.plotly_chart(fig, use_container_width=True)
 
-# ==================== 4. PERBANDINGAN RF vs K-MEANS ====================
+# PERBANDINGAN RF vs K-MEANS
 def comparison_section(df, province, date_range):
     st.header("📊 Perbandingan Random Forest vs K-Means")
     
@@ -801,7 +801,7 @@ def comparison_section(df, province, date_range):
     label_map = {0: '🟢 Rendah', 1: '🟡 Sedang', 2: '🔴 Tinggi'}
     df_features['rf_category'] = [label_map[p] for p in rf_pred]
     
-    # ==================== RUN K-MEANS ====================
+    # RUN K-MEANS
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
     
@@ -817,7 +817,7 @@ def comparison_section(df, province, date_range):
     
     sil_score = silhouette_score(X_scaled, df_features['kmeans_cluster'])
     
-    # ==================== 1. METRIK PERBANDINGAN ====================
+    # METRIK PERBANDINGAN
     st.subheader("📊 1. Metrik Kinerja")
     
     col1, col2, col3, col4 = st.columns(4)
@@ -842,7 +842,7 @@ def comparison_section(df, province, date_range):
     with col4:
         st.metric("Jumlah Cluster", n_clusters)
     
-    # ==================== 2. TABEL PERBANDINGAN ====================
+    # TABEL PERBANDINGAN
     st.subheader("📋 2. Perbandingan Hasil per Komoditas")
     
     compare_df = pd.DataFrame({
@@ -862,7 +862,7 @@ def comparison_section(df, province, date_range):
         hide_index=True
     )
     
-    # ==================== 3. VISUALISASI ====================
+    # VISUALISASI
     st.subheader("📊 3. Visualisasi Perbandingan")
     
     col1, col2 = st.columns(2)
@@ -915,7 +915,7 @@ def comparison_section(df, province, date_range):
         )
         st.plotly_chart(fig, use_container_width=True)
     
-    # ==================== 4. MATRIKS PERBANDINGAN ====================
+    # MATRIKS PERBANDINGAN
     st.subheader("📊 4. Matriks Perbandingan RF vs K-Means")
     
     rf_map = {'🟢 Rendah': 0, '🟡 Sedang': 1, '🔴 Tinggi': 2}
@@ -945,7 +945,7 @@ def comparison_section(df, province, date_range):
     
     st.pyplot(fig)
     
-    # ==================== 5. FEATURE IMPORTANCE ====================
+    # FEATURE IMPORTANCE
     st.subheader("📊 5. Feature Importance (Random Forest)")
     
     fi_df = pd.DataFrame({
@@ -970,7 +970,7 @@ def comparison_section(df, province, date_range):
     )
     st.plotly_chart(fig, use_container_width=True)
     
-    # ==================== 6. KESIMPULAN & REKOMENDASI ====================
+    # KESIMPULAN & REKOMENDASI
     st.subheader("📝 6. Kesimpulan & Rekomendasi")
     
     same_count = (rf_labels == km_labels).sum()
@@ -1028,7 +1028,7 @@ def comparison_section(df, province, date_range):
     - Kombinasikan keduanya untuk analisis yang lebih komprehensif
     """)
 
-# ==================== MAIN ROUTING ====================
+# MAIN ROUTING
 if df is not None:
     if analysis_type == "📈 SARIMA (Prediksi Harga)":
         sarima_section(df, province, commodity, date_range)
@@ -1047,7 +1047,7 @@ else:
 
 from datetime import datetime, timedelta
 
-# ==================== FOOTER ====================
+# FOOTER
 st.markdown("---")
 if df is not None:
     # Tambahkan 7 jam (karena UTC+7 = WIB)
